@@ -5,8 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/toolkits/smtp"
-
+	"github.com/ProForks/toolkits/smtp"
 	"github.com/urlooker/alarm/g"
 )
 
@@ -41,7 +40,7 @@ func SendMail(mail *g.Mail) {
 		<-MailWorkerChan
 	}()
 
-	s := smtp.New(g.Config.Smtp.Addr, g.Config.Smtp.Username, g.Config.Smtp.Password)
+	s := smtp.LoginAuth(g.Config.Smtp.Username, g.Config.Smtp.Password,g.Config.Smtp.Addr)
 	err := s.SendMail(g.Config.Smtp.From, strings.Replace(mail.Tos, ",", ";", -1), mail.Subject, mail.Content, "text")
 	if err != nil {
 		log.Println(err, "tos:", mail.Tos)
